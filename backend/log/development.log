@@ -1,0 +1,7 @@
+Started GET "/" for 192.168.65.1 at 2023-09-28 22:51:36 +0900
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /usr/local/bundle/gems/railties-6.1.7.6/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.7.6/lib/rails/templates/rails/welcome/index.html.erb (Duration: 4.6ms | Allocations: 537)
+Completed 200 OK in 18ms (Views: 9.8ms | ActiveRecord: 0.0ms | Allocations: 4503)
+
+
