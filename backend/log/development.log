@@ -5,3 +5,18 @@ Processing by Rails::WelcomeController#index as HTML
 Completed 200 OK in 18ms (Views: 9.8ms | ActiveRecord: 0.0ms | Allocations: 4503)
 
 
+Started GET "/_next/webpack-hmr" for 192.168.65.1 at 2023-09-30 03:29:29 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/_next/webpack-hmr"):
+  
+Started GET "/_next/webpack-hmr" for 192.168.65.1 at 2023-09-30 03:29:31 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/_next/webpack-hmr"):
+  
+Started GET "/" for 192.168.65.1 at 2023-09-30 03:29:32 +0900
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /usr/local/bundle/gems/railties-6.1.7.6/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.7.6/lib/rails/templates/rails/welcome/index.html.erb (Duration: 5.2ms | Allocations: 215)
+Completed 200 OK in 9ms (Views: 6.2ms | ActiveRecord: 0.0ms | Allocations: 2251)
+
+
