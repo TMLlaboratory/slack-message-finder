@@ -1,10 +1,10 @@
 version: '3.7'
-services:
+services: 
   db:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: backend_development
+      MYSQL_DATABASE: backend_development         
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql-data:/var/lib/mysql
@@ -29,8 +29,8 @@ services:
       - db
     stdin_open: true
     tty: true
-  frontend:
-    build:
+  frontend: 
+    build: 
       context: ./frontend/
       dockerfile: Dockerfile
     volumes:
@@ -47,17 +47,8 @@ services:
     volumes:
       - ./bot:/usr/src/app
     ports:
-      - "9000:9000"
-    command: ["python", "main.py"]
-  
-  ngrok:
-    image: wernight/ngrok
-    container_name: "ngrok"
-    ports:
-      - "4040:4040"
-    env_file:
-      - ngrok.env
-    command: ngrok http native-inspired-crane.ngrok.free.app 4040
-
+      - "9000:9000" 
+    command: ["python", "main.py"]  
+        
 volumes:
   mysql-data:
