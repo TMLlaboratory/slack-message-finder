@@ -2,6 +2,14 @@
 
 slack のログを記録し、検索するアプリ
 
+### 環境設定
+
+- __Task__ コマンドを使用する
+  - __Homebrew__ でインストール  
+    `brew install go-task`
+  - __Snap__ でインストールする場合  
+    `sudo snap install task --classic`
+
 ### コミットルール
 
 - コミットメッセージは行った開発を端的にわかりやすく書く（長すぎないように注意する）
