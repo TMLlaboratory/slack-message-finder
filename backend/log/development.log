@@ -20,3 +20,5 @@ Processing by Rails::WelcomeController#index as HTML
 Completed 200 OK in 9ms (Views: 6.2ms | ActiveRecord: 0.0ms | Allocations: 2251)
 
 
+  [1m[35m (1152.2ms)[0m  [1m[35mCREATE DATABASE "mydatabase_development" ENCODING = 'unicode'[0m
+  [1m[35m (999.7ms)[0m  [1m[35mCREATE DATABASE "mydatabase_test" ENCODING = 'unicode'[0m
