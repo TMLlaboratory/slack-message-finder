@@ -1,0 +1,61 @@
+.sideBarContainer {
+    height: 100vh; 
+    display: flex; 
+    justify-content: center;
+    flex-direction: column; 
+}
+
+.sideBarContent { 
+    margin-top: 96px;
+    left: 0;
+    position:absolute;
+    width: 20%;
+    height: 100%;
+    background-color: #1F1F1F;
+    display: flex; 
+    flex-direction: column; 
+}
+
+.teamNameContent {
+    border: 3px solid #3E3D3D;
+    flex: 0.5; 
+    display: flex;
+}
+
+.teamNameImg {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.mainNavContent {
+    border: 3px solid #3E3D3D;
+    flex: 2; 
+}
+
+.channelNavContent {
+    border: 3px solid #3E3D3D;
+    flex: 7.5; 
+}
+
+.teamNameButton {
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.teamNameButton:focus {
+    outline: none;
+}
+
+.dropdownMenu {
+    border: 1px solid #3E3D3D;
+    position: absolute;
+    width: 100%;
+    background-color: #3E3D3D;
+}

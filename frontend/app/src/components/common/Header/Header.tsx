@@ -13,7 +13,7 @@ const Header: FC = () => {
             
             <div className={s.searchInputContainer}>
                 <div className={s.inputContainer}>
-                    <img src="Group 1.svg" alt="Group1.svg" width={12} height={15} />
+                    <img src="magnifyingGlass.svg" alt="magnifyingGlass.svg" width={12} height={15} />
                     <input type="text" placeholder="TMLlab内を検索する" className={s.searchInput} />
                 </div>
                 

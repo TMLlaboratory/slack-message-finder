@@ -11,6 +11,7 @@ services:
       - /tmp/dockerdir:/etc/mysql/conf.d/
     ports:
       - 4306:3306
+      
   api:
     build:
       context: ./backend/
@@ -29,6 +30,7 @@ services:
       - db
     stdin_open: true
     tty: true
+
   frontend: 
     build: 
       context: ./frontend/
