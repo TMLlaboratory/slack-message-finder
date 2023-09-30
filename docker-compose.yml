@@ -1,16 +1,16 @@
 version: '3.7'
 services: 
   db:
-    image: mysql:8.0
+    image: postgres:13
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: backend_development         
-    command: --default-authentication-plugin=mysql_native_password
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
     volumes:
-      - mysql-data:/var/lib/mysql
-      - /tmp/dockerdir:/etc/mysql/conf.d/
+      - pgdata:/var/lib/postgresql/data
     ports:
-      - 4306:3306
+      - "5432:5432"
+      
   api:
     build:
       context: ./backend/
@@ -29,6 +29,7 @@ services:
       - db
     stdin_open: true
     tty: true
+
   frontend: 
     build: 
       context: ./frontend/
@@ -40,6 +41,7 @@ services:
       - "8000:3000"
     stdin_open: true
     tty: true
+
   bot:
     build:
       context: ./bot/
@@ -51,4 +53,5 @@ services:
     command: ["python", "main.py"]  
         
 volumes:
-  mysql-data:
+  pgdata:
+
