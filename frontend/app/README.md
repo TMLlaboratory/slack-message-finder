@@ -1,5 +1,16 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Build
+docker compose build
+docker compose run --rm api bin/rails db:create
+docker compose run --rm api bin/rails db:migrate
+docker comopse up
+
+## DB
+docker compose run --rm api bin/rails console
+テーブル名.all
+exit
+
 ## Getting Started
 
 First, run the development server:
