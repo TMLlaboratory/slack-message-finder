@@ -1,0 +1,22 @@
+version: "3"
+
+tasks:
+  default:
+    desc: ""
+    cmds:
+      - task -l --sort none
+
+  build:
+    desc: This task is docker dompose build
+    cmds:
+      - docker compose build
+
+  up:
+    desc: This task is docker compose up
+    cmds:
+      - docker compose up
+  
+  down:
+    desc: This task is docker compose down
+    cmds:
+      - docker compose down
