@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2023_09_30_175120) do
   enable_extension "plpgsql"
 
   create_table "channels", force: :cascade do |t|
-    t.text "channel_id"
+    t.text "channel"
     t.text "name"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2023_09_30_175120) do
 
   create_table "elements", force: :cascade do |t|
     t.bigint "message_id"
-    t.text "type"
+    t.text "element_type"
     t.text "text"
     t.text "url"
     t.datetime "created_at", precision: 6, null: false

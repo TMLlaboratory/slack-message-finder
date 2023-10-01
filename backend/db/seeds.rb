@@ -5,3 +5,55 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+require 'csv'
+
+# path設定
+user_path = Rails.root.join('db', 'seeds', 'user.csv')
+channel_path = Rails.root.join('db', 'seeds', 'channel.csv')
+member_path = Rails.root.join('db', 'seeds', 'member.csv')
+message_path = Rails.root.join('db', 'seeds', 'message.csv')
+reply_path = Rails.root.join('db', 'seeds', 'reply.csv')
+element_path = Rails.root.join('db', 'seeds', 'element.csv')
+image_path = Rails.root.join('db', 'seeds', 'image.csv')
+
+# 配列定義
+user_array = []
+channel_array = []
+member_array = []
+message_array = []
+reply_array = []
+element_array = []
+image_array = []
+
+# データ挿入
+CSV.foreach(user_path, headers: true) do |row|
+  user_array << { user: row['user'], email: row['email'], image: row['image'], real_name: row['real_name'], display_name: row['display_name'], is_admin: row['is_admin'], is_owner: row['is_owner'], is_primary_owner: row['is_primary_owner'], is_restricted: row['is_restricted'], is_ultra_restricted: row['is_ultra_restricted'], is_bot: row['is_bot'], is_app_user: row['is_app_user'] }
+end
+CSV.foreach(channel_path, headers: true) do |row|
+  channel_array << { channel: row['channel'], name: row['name'], user_id: row['user_id'] }
+end
+CSV.foreach(member_path, headers: true) do |row|
+  member_array << { channel_id: row['channel_id'], user_id: row['user_id'] }
+end
+CSV.foreach(message_path, headers: true) do |row|
+  message_array << { user_id: row['user_id'], ts: row['ts'], reply_count: row['reply_count'] }
+end
+CSV.foreach(reply_path, headers: true) do |row|
+  reply_array << { message_id: row['message_id'], user_id: row['user_id'], ts: row['ts'] }
+end
+CSV.foreach(element_path, headers: true) do |row|
+  element_array << { message_id: row['message_id'], element_type: row['element_type'], text: row['text'], url: row['url'] }
+end
+CSV.foreach(image_path, headers: true) do |row|
+  image_array << { message_id: row['message_id'], name: row['name'], url: row['url'] }
+end
+
+# インポート
+User.create!(user_array)
+Channel.create!(channel_array)
+Member.create!(member_array)
+Message.create!(message_array)
+Reply.create!(reply_array)
+Element.create!(element_array)
+Image.create!(image_array)
