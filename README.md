@@ -2,6 +2,14 @@
 
 slack のログを記録し、検索するアプリ
 
+### 環境設定
+
+- __Task__ コマンドを使用する
+  - __Homebrew__ でインストール  
+    `brew install go-task`
+  - __Snap__ でインストールする場合  
+    `sudo snap install task --classic`
+
 ### コミットルール
 
 - コミットメッセージは行った開発を端的にわかりやすく書く（長すぎないように注意する）
@@ -15,3 +23,13 @@ slack のログを記録し、検索するアプリ
   - `git commit -m "[feat] model group"`
   - `git commit -m "[fix] login page"`
   - `git commit -m "[mod] mypage"`
+
+## Build
+
+task build
+
+## DB
+
+docker compose run --rm api bin/rails console
+テーブル名.all
+exit
