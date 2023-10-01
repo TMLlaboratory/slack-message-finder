@@ -8,7 +8,7 @@ const Header: FC = () => {
         <div className={s.flexContainer}>
 
             <div className={s.titleContainer}>
-                <p  className={s.title}>Slack-message-finder</p>
+                <p  className={s.title}>Slack-Message-Finder</p>
             </div>
             
             <div className={s.searchInputContainer}>
