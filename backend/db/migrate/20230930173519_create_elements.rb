@@ -3,7 +3,7 @@ class CreateElements < ActiveRecord::Migration[6.1]
     create_table :elements do |t|
 
       t.references :message
-      t.text :type
+      t.text :element_type
       t.text :text
       t.text :url
       t.timestamps
