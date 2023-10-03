@@ -1,19 +1,8 @@
 .sideBarContainer {
-    height: 100vh; 
-    display: flex; 
-    justify-content: center;
-    flex-direction: column; 
 }
 
 .sideBarContent { 
-    margin-top: 120px;
-    left: 0;
-    position:absolute;
-    width: 20%;
-    height: 100%;
     background-color: #1F1F1F;
-    display: flex; 
-    flex-direction: column; 
 }
 
 .teamNameContent {
@@ -93,6 +82,10 @@
     outline: none;
 }
 
+.mainButton:active {
+    transform: scale(0.98); 
+}
+
 .channelButton {
     margin-top: 0px;  
     background-color: #1F1F1F;
@@ -112,4 +105,12 @@
 
 .channelButton:focus {
     outline: none;
+}
+
+.channelButton:active {
+    transform: scale(0.98); 
+}
+
+.selectedChannelButton {
+    background-color: #3E3D3D; /* または他のハイライト色 */
 }

@@ -1,22 +1,44 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";  
 import s from './SideBar.module.css';
 
-const SideBar: FC = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+interface Channel {
+    id: number;
+    channel: string;
+    name: string;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+};
 
-    const channels = [
-        { id: 1, name: 'times-takasuka' },
-        { id: 2, name: 'times-iida' },
-        { id: 3, name: 'times-wakatsuki' },
-    ];
+interface SideBarProps {
+    setSelectedChannel: (channelId: number) => void;
+}
+
+
+const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [channels, setChannels] = useState<Channel[]>([]);
+    const [selectedChannelId, setSelectedChannelId] = useState<number | null>(null);
+
+ 
+
+    useEffect(() => {
+        fetch('http://localhost:3000/api/v1/channels')
+            .then(response => response.json())
+            .then(data => setChannels(data));  
+    }, []);
 
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     }
 
-    const handleChannelClick = (channelName: string) => {
-        console.log(`Switched to channel: ${channelName}`);
+    const handleChannelClick = (channel: Channel) => {
+        console.log(`Switched to channel: ${channel.name}`);
+        setSelectedChannel(channel.id);
+        setSelectedChannelId(channel.id);
     }
+    
+    
 
     return (
         <section className={s.sideBarContainer}>
@@ -56,13 +78,16 @@ const SideBar: FC = () => {
 
                 <div className={s.channelNavContent}>
                     <div className={s.channelButtonContent}>
-                        {channels.map(channel => (
-                        <button key={channel.id} onClick={() => handleChannelClick(channel.name)} className={s.channelButton}>
-                            {'# ' +channel.name}
+                    {channels.map(channel => (
+                        <button 
+                            key={channel.id} 
+                            onClick={() => handleChannelClick(channel)} 
+                            className={`${s.channelButton} ${channel.id === selectedChannelId ? s.selectedChannelButton : ''}`}
+                        >
+                            {'# ' + channel.name}
                         </button>
                     ))}
-                    </div>
-                    
+                    </div> 
                 </div>
             </div>
         </section>
