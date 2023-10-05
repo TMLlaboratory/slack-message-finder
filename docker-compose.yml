@@ -1,5 +1,5 @@
-version: '3.7'
-services: 
+version: "3.7"
+services:
   db:
     image: postgres:13
     environment:
@@ -10,7 +10,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-      
+
   api:
     build:
       context: ./backend/
@@ -30,8 +30,8 @@ services:
     stdin_open: true
     tty: true
 
-  frontend: 
-    build: 
+  frontend:
+    build:
       context: ./frontend/
       dockerfile: Dockerfile
     volumes:
@@ -48,10 +48,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./bot:/usr/src/app
+    env_file:
+      - settings/bot.env
     ports:
-      - "9000:9000" 
-    command: ["python", "main.py"]  
-        
+      - "9000:9000"
+    command: ["python", "main.py"]
+
 volumes:
   pgdata:
 
