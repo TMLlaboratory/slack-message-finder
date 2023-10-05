@@ -1,0 +1,13 @@
+.container {
+
+}
+
+.sidebar {
+
+}
+
+.messages {
+    top:500px;
+    left: 500px;
+    position:absolute;
+}
