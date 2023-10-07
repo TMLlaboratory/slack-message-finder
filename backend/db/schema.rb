@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_30_175120) do
+ActiveRecord::Schema.define(version: 2023_10_06_165510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,10 +18,11 @@ ActiveRecord::Schema.define(version: 2023_09_30_175120) do
   create_table "channels", force: :cascade do |t|
     t.text "channel"
     t.text "name"
-    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_channels_on_user_id"
+    t.integer "creator"
+    t.boolean "is_private"
+    t.integer "num_members"
   end
 
   create_table "elements", force: :cascade do |t|
@@ -58,6 +59,8 @@ ActiveRecord::Schema.define(version: 2023_09_30_175120) do
     t.integer "reply_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "channel_id", null: false
+    t.index ["channel_id"], name: "index_messages_on_channel_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
@@ -88,4 +91,5 @@ ActiveRecord::Schema.define(version: 2023_09_30_175120) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "messages", "channels"
 end
