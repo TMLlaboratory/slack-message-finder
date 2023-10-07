@@ -10,6 +10,7 @@ class CreateMessages < ActiveRecord::Migration[6.1]
       t.text :image_url
       t.text :url
       t.text :channel
+      t.boolean :is_bot
       t.timestamps
     end
   end

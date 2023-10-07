@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2023_09_30_173502) do
     t.text "image_url"
     t.text "url"
     t.text "channel"
+    t.boolean "is_bot"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
