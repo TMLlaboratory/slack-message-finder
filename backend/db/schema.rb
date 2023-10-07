@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_06_165510) do
+ActiveRecord::Schema.define(version: 2023_09_30_173502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,60 +18,30 @@ ActiveRecord::Schema.define(version: 2023_10_06_165510) do
   create_table "channels", force: :cascade do |t|
     t.text "channel"
     t.text "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "creator"
+    t.text "creator"
     t.boolean "is_private"
-    t.integer "num_members"
-  end
-
-  create_table "elements", force: :cascade do |t|
-    t.bigint "message_id"
-    t.text "element_type"
-    t.text "text"
-    t.text "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["message_id"], name: "index_elements_on_message_id"
-  end
-
-  create_table "images", force: :cascade do |t|
-    t.bigint "message_id"
-    t.text "name"
-    t.text "url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["message_id"], name: "index_images_on_message_id"
   end
 
   create_table "members", force: :cascade do |t|
-    t.bigint "channel_id"
-    t.bigint "user_id"
+    t.text "channel"
+    t.text "user"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["channel_id"], name: "index_members_on_channel_id"
-    t.index ["user_id"], name: "index_members_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
-    t.bigint "user_id"
+    t.text "user"
     t.text "ts"
-    t.integer "reply_count"
+    t.text "thread_ts"
+    t.text "text"
+    t.text "image_name"
+    t.text "image_url"
+    t.text "url"
+    t.text "channel"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "channel_id", null: false
-    t.index ["channel_id"], name: "index_messages_on_channel_id"
-    t.index ["user_id"], name: "index_messages_on_user_id"
-  end
-
-  create_table "replies", force: :cascade do |t|
-    t.bigint "message_id"
-    t.bigint "user_id"
-    t.text "ts"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["message_id"], name: "index_replies_on_message_id"
-    t.index ["user_id"], name: "index_replies_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -91,5 +61,4 @@ ActiveRecord::Schema.define(version: 2023_10_06_165510) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "messages", "channels"
 end
