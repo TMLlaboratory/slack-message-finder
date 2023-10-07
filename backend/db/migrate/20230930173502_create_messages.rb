@@ -2,9 +2,15 @@ class CreateMessages < ActiveRecord::Migration[6.1]
   def change
     create_table :messages do |t|
 
-      t.references :user
+      t.text :user
       t.text :ts
-      t.integer :reply_count
+      t.text :thread_ts
+      t.text :text
+      t.text :image_name
+      t.text :image_url
+      t.text :url
+      t.text :channel
+      t.boolean :is_bot
       t.timestamps
     end
   end
