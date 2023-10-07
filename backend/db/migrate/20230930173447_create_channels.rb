@@ -4,7 +4,6 @@ class CreateChannels < ActiveRecord::Migration[6.1]
 
       t.text :channel
       t.text :name
-      t.references :user
       t.timestamps
     end
   end
