@@ -1,6 +1,7 @@
 import logging
 import os
 import psycopg2
+import json
 from datetime import datetime
 from slack_sdk import WebClient
 from slack_bolt import App
@@ -10,43 +11,62 @@ logging.basicConfig(level=logging.DEBUG)
 
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
 
+try:
+    connection = psycopg2.connect(
+        host="db",
+        user="user",
+        password="password",
+        database="mydatabase_development",
+    )
+    print('データベースの接続に成功しました')
+except Exception as e:
+    connection = None
+    print('データベースの接続に失敗しました')
+
 # メッセージイベントがあった時に発火
 @app.event("message")
 def handle_message_events(body, logger):
-    logger.info(body)
-    print(body)
+    logger.debug(json.dumps(body, indent=4))
 
-    try:
-        connection = psycopg2.connect(
-            host="db",
-            user="user",
-            password="password",
-            database="mydatabase_development",
-        )
-        logger.info("データベースへの接続に成功しました.")
-
-    except Exception as e:
-        logger.info("データベースへの接続に失敗しました.")
-        connection = None
+    user = body.get("event", {}).get("user", "")
+    channel = body.get("event", {}).get("channel", "")
+    ts = body.get("event", {}).get("ts", "")
+    thread_ts = body.get("event", {}).get("thread_ts", "")
+    text = (
+        body.get("event", {})
+        .get("blocks", [{}])[0]
+        .get("elements", [{}])[0]
+        .get("elements", [{}])[0]
+        .get("text", "")
+    )
+    url = (
+        body.get("event", {})
+        .get("blocks", [{}])[0]
+        .get("elements", [{}])[0]
+        .get("elements", [{}])[0]
+        .get("url", "")
+    )
+    image_name = body.get("event", {}).get("files", [{}])[0].get("name", "")
+    image_url = body.get("event", {}).get("files", [{}])[0].get("url_private", "")
 
     if connection is not None:
         try:
             with connection.cursor() as cursor:
                 current_datetime = datetime.now()
-                sql = "INSERT INTO messages (channel_id, user_id, ts, thread_ts, text, url, image_name, image_url, is_bot, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO messages (channel_id, user_id, ts, thread_ts, text, url, image_name, image_url, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 cursor.execute(
-                    sql, (
-                        "C05U9D2T2NP", 
-                        "U05SL6CB6DN", 
-                        "1696656615.397500", 
-                        "1696654369.66477", 
-                        "test_normal_message", 
-                        "https://blog.nutmeg.cloud/", 
-                        "IMG_2709.jpg", 
-                        "https://files.slack.com/files-pri/T05RX3HH4V9-F0605UU11DZ/img_2709.jpg", 
-                        True, 
-                        current_datetime, 
-                        current_datetime
+                    sql,
+                    (
+                        channel,
+                        user,
+                        ts,
+                        thread_ts,
+                        text,
+                        url,
+                        image_name,
+                        image_url,
+                        current_datetime,
+                        current_datetime,
                     )
                 )
             connection.commit()

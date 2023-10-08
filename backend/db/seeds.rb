@@ -31,7 +31,7 @@ CSV.foreach(member_path, headers: true) do |row|
   member_array << { channel_id: row['channel_id'], user_id: row['user_id'] }
 end
 CSV.foreach(message_path, headers: true) do |row|
-  message_array << { channel_id: row['channel_id'], user_id: row['user_id'], ts: row['ts'], thread_ts: row['thread_ts'], text: row['text'], url: row['row'], image_name: row['image_name'], image_url: row['image_url'], is_bot: row['is_bot'] }
+  message_array << { channel_id: row['channel_id'], user_id: row['user_id'], ts: row['ts'], thread_ts: row['thread_ts'], text: row['text'], url: row['row'], image_name: row['image_name'], image_url: row['image_url'] }
 end
 
 # インポート
