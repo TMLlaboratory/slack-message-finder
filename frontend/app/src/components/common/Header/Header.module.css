@@ -5,6 +5,11 @@
   width: 100%;
 }
 
+.img1 {
+  width: 12px; 
+  height: 15px; 
+}
+ 
 .flexContainer {
   display: flex;
   justify-content: space-between;
