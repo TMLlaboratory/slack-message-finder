@@ -10,7 +10,6 @@ interface Message {
     image_url: string | null;
     url: string | null;
     channel: string;
-    is_bot: boolean;
     created_at: string;
     updated_at: string;
 };
