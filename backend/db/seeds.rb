@@ -22,16 +22,16 @@ message_array = []
 
 # データ挿入
 CSV.foreach(user_path, headers: true) do |row|
-  user_array << { user: row['user'], email: row['email'], image: row['image'], real_name: row['real_name'], display_name: row['display_name'], is_admin: row['is_admin'], is_owner: row['is_owner'], is_primary_owner: row['is_primary_owner'], is_restricted: row['is_restricted'], is_ultra_restricted: row['is_ultra_restricted'], is_bot: row['is_bot'], is_app_user: row['is_app_user'] }
+  user_array << { user_id: row['user_id'], email: row['email'], image: row['image'], real_name: row['real_name'], display_name: row['display_name'], is_admin: row['is_admin'], is_owner: row['is_owner'], is_primary_owner: row['is_primary_owner'], is_restricted: row['is_restricted'], is_ultra_restricted: row['is_ultra_restricted'], is_bot: row['is_bot'], is_app_user: row['is_app_user'] }
 end
 CSV.foreach(channel_path, headers: true) do |row|
-  channel_array << { channel: row['channel'], name: row['name'], creator: row['creator'], is_private: row['is_private'] }
+  channel_array << { channel_id: row['channel_id'], name: row['name'], creator: row['creator'], is_private: row['is_private'] }
 end
 CSV.foreach(member_path, headers: true) do |row|
-  member_array << { channel: row['channel'], user: row['user'] }
+  member_array << { channel_id: row['channel_id'], user_id: row['user_id'] }
 end
 CSV.foreach(message_path, headers: true) do |row|
-  message_array << { user: row['user'], channel: row['channel'], ts: row['ts'], thread_ts: row['thread_ts'], text: row['text'], image_name: row['image_name'], image_url: row['image_url'], url: row['row'], is_bot: row['is_bot'] }
+  message_array << { channel_id: row['channel_id'], user_id: row['user_id'], ts: row['ts'], thread_ts: row['thread_ts'], text: row['text'], url: row['row'], image_name: row['image_name'], image_url: row['image_url'] }
 end
 
 # インポート

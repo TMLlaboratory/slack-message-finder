@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2023_09_30_173502) do
   enable_extension "plpgsql"
 
   create_table "channels", force: :cascade do |t|
-    t.text "channel"
+    t.text "channel_id"
     t.text "name"
     t.text "creator"
     t.boolean "is_private"
@@ -25,28 +25,27 @@ ActiveRecord::Schema.define(version: 2023_09_30_173502) do
   end
 
   create_table "members", force: :cascade do |t|
-    t.text "channel"
-    t.text "user"
+    t.text "channel_id"
+    t.text "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "messages", force: :cascade do |t|
-    t.text "user"
+    t.text "channel_id"
+    t.text "user_id"
     t.text "ts"
     t.text "thread_ts"
     t.text "text"
+    t.text "url"
     t.text "image_name"
     t.text "image_url"
-    t.text "url"
-    t.text "channel"
-    t.boolean "is_bot"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.text "user"
+    t.text "user_id"
     t.text "email"
     t.text "image"
     t.text "real_name"
