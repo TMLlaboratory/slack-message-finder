@@ -1,8 +1,12 @@
 .sideBarContainer {
+    height: 100vh; /* Viewport Heightの100%に設定 */
 }
 
-.sideBarContent { 
+.sideBarContent {
     background-color: #1F1F1F;
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
 }
 
 .teamNameContent {
@@ -14,6 +18,8 @@
 .teamNameImg {
     margin-left: 10px;
     vertical-align: middle;
+    width: 20px; 
+    height: 30px; 
 }
 
 .mainNavContent {

@@ -5,13 +5,14 @@ interface Channel {
     id: number;
     channel: string;
     name: string;
-    user_id: number;
+    creator: string;
+    is_private: boolean;
     created_at: string;
     updated_at: string;
 };
 
 interface SideBarProps {
-    setSelectedChannel: (channelId: number) => void;
+    setSelectedChannel: (channel: string) => void;
 }
 
 
@@ -34,19 +35,19 @@ const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
 
     const handleChannelClick = (channel: Channel) => {
         console.log(`Switched to channel: ${channel.name}`);
-        setSelectedChannel(channel.id);
+        setSelectedChannel(channel.channel);  
         setSelectedChannelId(channel.id);
     }
     
     
 
     return (
-        <section className={s.sideBarContainer}>
+        <>
             <div className={s.sideBarContent}>
                 <div className={s.teamNameContent}>
                     <button onClick={toggleDropdown} className={s.teamNameButton}>
                         TMLlab 
-                        <img src="lowerTriangle.svg" width={20} height={30} className={s.teamNameImg}/>
+                        <img src="lowerTriangle.svg" className={s.teamNameImg}/>
                         {isDropdownOpen && (
                             <div className={s.dropdownMenu}>
                                 <option>NUTMEG</option>
@@ -90,7 +91,7 @@ const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
                     </div> 
                 </div>
             </div>
-        </section>
+        </>
     )
 }
 
