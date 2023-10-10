@@ -1,51 +1,52 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 interface Message {
     id: number;
-    user: string;
+    user_id: string; 
     ts: string;
     thread_ts: string | null;
     text: string;
     image_name: string | null;
     image_url: string | null;
     url: string | null;
-    channel: string;
+    channel_id: string; 
     created_at: string;
     updated_at: string;
+    children: Message[]; 
 };
 
 interface ReplyBarProps {
-    message: Message | null;
+    message: Message; 
     children: Message[];
 };
 
-const ReplyBar: React.FC<ReplyBarProps> = ({ message, children }) => {
+const ReplyBar: FC<ReplyBarProps> = ({ message, children }) => {
     return (
         <div className="reply-bar">
             {message && (
                 <div className="message">
-                    {message.user && (
+                    {message.user_id && (
                         <>
-                            <strong>User:</strong> {message.user}
+                            <p>User:</p> {message.user_id}  
                             <br />
                         </>
                     )}
                     {message.text && message.url ? (
                         <>
-                            <strong>Text:</strong> <a href={message.url}>{message.text}</a>
+                            <p>Text:</p> <a href={message.url}>{message.text}</a>  
                             <br />
                         </>
                     ) : (
                         <>
                             {message.text && (
                                 <>
-                                    <strong>Text:</strong> {message.text}
+                                    <p>Text:</p> {message.text}  
                                     <br />
                                 </>
                             )}
                             {message.url && (
                                 <>
-                                    <strong>URL:</strong> <a href={message.url}>{message.url}</a>
+                                    <p>URL:</p> <a href={message.url}>{message.url}</a>  
                                     <br />
                                 </>
                             )}
@@ -60,7 +61,7 @@ const ReplyBar: React.FC<ReplyBarProps> = ({ message, children }) => {
                         <>
                             {message.image_name && (
                                 <>
-                                    <strong>Image Name:</strong> {message.image_name}
+                                    <p>Image Name:</p> {message.image_name}  
                                     <br />
                                 </>
                             )}
@@ -72,28 +73,28 @@ const ReplyBar: React.FC<ReplyBarProps> = ({ message, children }) => {
             <p>{children.length} 件の返信</p>
                 {children.map(child => (
                     <div key={child.id}>
-                        {child.user && (
+                        {child.user_id && (
                         <>
-                            <strong>User:</strong> {child.user}
+                            <p>User:</p> {child.user_id} 
                             <br />
                         </>
                     )}
                         {child.text && child.url ? (
                             <>
-                                <strong>Text:</strong> <a href={child.url}>{child.text}</a>
+                                <p>Text:</p> <a href={child.url}>{child.text}</a>  
                                 <br />
                             </>
                         ) : (
                             <>
                                 {child.text && (
                                     <>
-                                        <strong>Text:</strong> {child.text}
+                                        <p>Text:</p> {child.text}  
                                         <br />
                                     </>
                                 )}
                                 {child.url && (
                                     <>
-                                        <strong>URL:</strong> <a href={child.url}>{child.url}</a>
+                                        <p>URL:</p> <a href={child.url}>{child.url}</a>  
                                         <br />
                                     </>
                                 )}
@@ -108,7 +109,7 @@ const ReplyBar: React.FC<ReplyBarProps> = ({ message, children }) => {
                             <>
                                 {child.image_name && (
                                     <>
-                                        <strong>Image Name:</strong> {child.image_name}
+                                        <p>Image Name:</p> {child.image_name}  
                                         <br />
                                     </>
                                 )}

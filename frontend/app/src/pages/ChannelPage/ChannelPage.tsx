@@ -6,7 +6,7 @@ import s from './ChannelPage.module.css';
 
 interface Channel {
     id: number;
-    channel: string;
+    channel_id: string; 
     name: string;
     creator: string;
     is_private: boolean;
@@ -16,14 +16,14 @@ interface Channel {
 
 interface Message {
     id: number;
-    user: string;
+    user_id: string;  
     ts: string;
     thread_ts: string | null;
     text: string;
     image_name: string | null;
     image_url: string | null;
     url: string | null;
-    channel: string;
+    channel_id: string;  
     created_at: string;
     updated_at: string;
     children: Message[];
@@ -31,7 +31,7 @@ interface Message {
 
 const ChannelPage: FC = () => {
     const [channels, setChannels] = useState<Channel[]>([]);
-    const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
+    const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null); 
     const [messages, setMessages] = useState<Message[]>([]);
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
@@ -43,7 +43,7 @@ const ChannelPage: FC = () => {
 
     useEffect(() => {
         if (selectedChannel) {
-            fetch(`http://localhost:3000/api/v1/messages?channel=${selectedChannel}`)
+            fetch(`http://localhost:3000/api/v1/messages?channel_id=${selectedChannel.channel_id}`) 
                 .then(response => response.json())
                 .then(data => setMessages(data));
         }
@@ -61,14 +61,14 @@ const ChannelPage: FC = () => {
             <div className={s.container}>
 
                 <div className={s.sidebar}>
-                    <SideBar setSelectedChannel={(channel: string) => {
-                        setSelectedChannel(channel);
+                    <SideBar setSelectedChannel={(channel: Channel) => {  
+                        setSelectedChannel(channel);  
                     }} />
                 </div>
 
                 <div className={s.box}>
                     <div className={s.messagesBox} style={{ flex: selectedMessage ? 7 : 1 }}>
-                        <p>{selectedChannel}</p>
+                        <p>{selectedChannel ? selectedChannel.name : ''}</p>  
                         {messages.map(message => (
                             <MessageBox key={message.id} message={message} onToggleChildren={handleToggleChildren} />
                         ))}

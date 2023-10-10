@@ -3,7 +3,7 @@ import s from './SideBar.module.css';
 
 interface Channel {
     id: number;
-    channel: string;
+    channel_id: string;  
     name: string;
     creator: string;
     is_private: boolean;
@@ -12,16 +12,13 @@ interface Channel {
 };
 
 interface SideBarProps {
-    setSelectedChannel: (channel: string) => void;
+    setSelectedChannel: (channel: Channel) => void;  
 }
-
 
 const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [channels, setChannels] = useState<Channel[]>([]);
     const [selectedChannelId, setSelectedChannelId] = useState<number | null>(null);
-
- 
 
     useEffect(() => {
         fetch('http://localhost:3000/api/v1/channels')
@@ -35,12 +32,10 @@ const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
 
     const handleChannelClick = (channel: Channel) => {
         console.log(`Switched to channel: ${channel.name}`);
-        setSelectedChannel(channel.channel);  
+        setSelectedChannel(channel); 
         setSelectedChannelId(channel.id);
     }
     
-    
-
     return (
         <>
             <div className={s.sideBarContent}>

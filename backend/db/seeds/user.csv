@@ -1,0 +1,7 @@
+user_id,email,image,real_name,display_name,is_admin,is_owner,is_primary_owner,is_restricted,is_ultra_restricted,is_bot,is_app_user
+1,user1@example.com,image1.jpg,Real Name1,Display Name1,true,false,false,false,false,false,false
+2,user2@example.com,image2.jpg,Real Name2,Display Name2,false,false,false,false,false,false,false
+3,user3@example.com,image3.jpg,Real Name3,Display Name3,false,false,false,false,false,false,false
+4,user4@example.com,image4.jpg,Real Name4,Display Name4,false,false,false,false,false,false,false
+5,user5@example.com,image5.jpg,Real Name5,Display Name5,false,false,false,false,false,true,false
+6,user6@example.com,image6.jpg,Real Name6,Display Name6,false,false,false,true,true,false,false
