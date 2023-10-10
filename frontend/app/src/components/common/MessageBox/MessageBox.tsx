@@ -2,49 +2,50 @@ import React, { FC } from 'react';
 
 interface Message {
     id: number;
-    user: string;
+    user_id: string; 
     ts: string;
     thread_ts: string | null;
     text: string;
     image_name: string | null;
     image_url: string | null;
     url: string | null;
-    channel: string;
+    channel_id: string;  
     created_at: string;
     updated_at: string;
-    children: Message[];
+    children: Message[]; 
 };
 
 interface MessageBoxProps {
     message: Message;
     onToggleChildren: (message: Message) => void;
 }
+
 const MessageBox: FC<MessageBoxProps> = ({ message, onToggleChildren }) => {
     return (
         <div key={message.id}>
             <div>
-                {message.user && (
+                {message.user_id && (
                     <>
-                        <strong>User:</strong> {message.user}
+                        <p>User:</p> {message.user_id} 
                         <br />
                     </>
                 )}
                 {message.text && message.url ? (
                     <>
-                        <strong>Text:</strong> <a href={message.url}>{message.text}</a>
+                        <p>Text:</p> <a href={message.url}>{message.text}</a> 
                         <br />
                     </>
                 ) : (
                     <>
                         {message.text && (
                             <>
-                                <strong>Text:</strong> {message.text}
+                                <p>Text:</p> {message.text} 
                                 <br />
                             </>
                         )}
                         {message.url && (
                             <>
-                                <strong>URL:</strong> <a href={message.url}>{message.url}</a>
+                                <p>URL:</p> <a href={message.url}>{message.url}</a>  
                                 <br />
                             </>
                         )}
@@ -59,7 +60,7 @@ const MessageBox: FC<MessageBoxProps> = ({ message, onToggleChildren }) => {
                     <>
                         {message.image_name && (
                             <>
-                                <strong>Image Name:</strong> {message.image_name}
+                                <p>Image Name:</p> {message.image_name} 
                                 <br />
                             </>
                         )}
