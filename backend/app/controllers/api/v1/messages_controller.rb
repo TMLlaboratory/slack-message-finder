@@ -28,7 +28,6 @@ class Api::V1::MessagesController < ApplicationController
                 image_url: parent.image_url,
                 url: parent.url,
                 channel: parent.channel,
-                is_bot: parent.is_bot,
                 created_at: parent.created_at,
                 updated_at: parent.updated_at,
                 children: children.select { |child| child.thread_ts == parent.ts }.map do |child|
@@ -42,7 +41,6 @@ class Api::V1::MessagesController < ApplicationController
                         image_url: child.image_url,
                         url: child.url,
                         channel: child.channel,
-                        is_bot: child.is_bot,
                         created_at: child.created_at,
                         updated_at: child.updated_at
                     }
