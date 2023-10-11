@@ -1,122 +1,156 @@
-import React, { FC } from 'react';
-
-interface Message {
+import React, { FC, useState, useEffect } from 'react';
+import s from '@/components/common/ReplyBar/ReplyBar.module.css';
+interface ParentMessage {
     id: number;
-    user_id: string; 
+    user_id: string;  
     ts: string;
     thread_ts: string | null;
     text: string;
     image_name: string | null;
     image_url: string | null;
     url: string | null;
-    channel_id: string; 
+    channel_id: string;  
     created_at: string;
     updated_at: string;
-    children: Message[]; 
-};
+}
+
+interface ChildMessage {
+    id: number;
+    user_id: string;  
+    ts: string;
+    thread_ts: string | null;
+    text: string;
+    image_name: string | null;
+    image_url: string | null;
+    url: string | null;
+    channel_id: string;  
+    created_at: string;
+    updated_at: string;
+}
+
+interface ThreadMessage {
+    id: number;
+    user_id: string;  
+    ts: string;
+    thread_ts: string | null;
+    text: string;
+    image_name: string | null;
+    image_url: string | null;
+    url: string | null;
+    channel_id: string;  
+    created_at: string;
+    updated_at: string;
+}
+interface MessageGroup {
+    parent: ParentMessage;
+    children: ChildMessage[];
+    thread: ThreadMessage[];
+}
 
 interface ReplyBarProps {
-    message: Message; 
-    children: Message[];
-};
+    messageGroup: MessageGroup;
+}
 
-const ReplyBar: FC<ReplyBarProps> = ({ message, children }) => {
+interface User {
+    display_name: string;
+    image: string;
+}
+
+interface UserMap {
+    [key: string]: User;
+}
+
+const ReplyBar: FC<ReplyBarProps> = ({ messageGroup }) => {
+    const { parent, thread } = messageGroup;
+    
+    const [userMap, setUserMap] = useState<UserMap>({}); 
+
+    useEffect(() => {
+        const userIds = [parent.user_id, ...thread.map(threadMessage => threadMessage.user_id)];
+        const uniqueUserIds = Array.from(new Set(userIds));
+        Promise.all(uniqueUserIds.map(userId =>
+            fetch(`http://localhost:3000/api/v1/users/${userId}`)
+                .then(response => response.json())
+                .then(data => ({ userId, data }))
+        ))
+        .then(results => {
+            const newUserMap: UserMap = {}; 
+            results.forEach(result => {
+                newUserMap[result.userId] = result.data;
+            });
+            setUserMap(newUserMap);
+        });
+    }, [parent.user_id, thread]);
+
+    const formatDateTime = (isoString: string) => {
+        const dateObj = new Date(isoString);
+        const formattedDate = dateObj.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const formattedTime = dateObj.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
+        return `${formattedDate} - ${formattedTime}`;
+    };
+    
+    const renderContent = (text: string | null, url: string | null, imageUrl: string | null) => {
+        if (text && url) {
+            return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p>;
+        }
+        if (text) {
+            return <p className={s.p}>{text}</p>;
+        }
+        if (url) {
+            return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>;
+        }
+        if (imageUrl) {
+            return <p className={s.p}><img src={imageUrl} alt="Image"/></p>;
+        }
+        return null;
+    };
+
     return (
-        <div className="reply-bar">
-            {message && (
-                <div className="message">
-                    {message.user_id && (
-                        <>
-                            <p>User:</p> {message.user_id}  
-                            <br />
-                        </>
-                    )}
-                    {message.text && message.url ? (
-                        <>
-                            <p>Text:</p> <a href={message.url}>{message.text}</a>  
-                            <br />
-                        </>
-                    ) : (
-                        <>
-                            {message.text && (
-                                <>
-                                    <p>Text:</p> {message.text}  
-                                    <br />
-                                </>
-                            )}
-                            {message.url && (
-                                <>
-                                    <p>URL:</p> <a href={message.url}>{message.url}</a>  
-                                    <br />
-                                </>
-                            )}
-                        </>
-                    )}
-                    {message.image_url ? (
-                        <>
-                            <img src={message.image_url} alt={message.image_name || 'Image'} />
-                            <br />
-                        </>
-                    ) : (
-                        <>
-                            {message.image_name && (
-                                <>
-                                    <p>Image Name:</p> {message.image_name}  
-                                    <br />
-                                </>
-                            )}
-                        </>
-                    )}
-                </div>
-            )}
-            <div className="children">
-            <p>{children.length} 件の返信</p>
-                {children.map(child => (
-                    <div key={child.id}>
-                        {child.user_id && (
-                        <>
-                            <p>User:</p> {child.user_id} 
-                            <br />
-                        </>
-                    )}
-                        {child.text && child.url ? (
-                            <>
-                                <p>Text:</p> <a href={child.url}>{child.text}</a>  
-                                <br />
-                            </>
-                        ) : (
-                            <>
-                                {child.text && (
-                                    <>
-                                        <p>Text:</p> {child.text}  
-                                        <br />
-                                    </>
-                                )}
-                                {child.url && (
-                                    <>
-                                        <p>URL:</p> <a href={child.url}>{child.url}</a>  
-                                        <br />
-                                    </>
-                                )}
-                            </>
-                        )}
-                        {child.image_url ? (
-                            <>
-                                <img src={child.image_url} alt={child.image_name || 'Image'} />
-                                <br />
-                            </>
-                        ) : (
-                            <>
-                                {child.image_name && (
-                                    <>
-                                        <p>Image Name:</p> {child.image_name}  
-                                        <br />
-                                    </>
-                                )}
-                            </>
-                        )}
+        <div key={parent.id}>
+    
+            <div>
+                <div className={s.onebox}>
+                    <div className={s.imgbox}>
+                        <img className={s.img} src="Group 10.svg" />
                     </div>
-                ))}
+                    <div>
+                        <div className={s.nameTimeBox}>
+                            {userMap[parent.user_id] && <p className={s.p}>{userMap[parent.user_id]?.display_name || 'Loading...'}</p>}
+                            {parent.created_at && <p className={s.ptime}>{formatDateTime(parent.created_at)}</p>}
+                        </div>
+                        <div>
+                            {renderContent(parent.text, parent.url, parent.image_url)}
+                        </div>
+                    </div>
+                </div>
+
+                <div className={s.replyWord}>
+                    <p className={s.p}>{thread.length} 件の返信</p>
+                </div>
+                 
+                <div className="children">
+                   
+                    {thread.map(threadMessage => (
+                        <>
+                            <div key={threadMessage.id} className={s.onebox}>
+
+                                <div className={s.imgbox}>
+                                    <img className={s.img} src="Group 10.svg" />
+                                </div>
+
+                                <div>
+                                    <div className={s.nameTimeBox}>
+                                        {userMap[threadMessage.user_id] && <p className={s.p}>{userMap[threadMessage.user_id]?.display_name || 'Loading...'}</p>}
+                                        {threadMessage.created_at && <p className={s.ptime}>{formatDateTime(threadMessage.created_at)}</p>}
+                                    </div>
+                                    {renderContent(threadMessage.text, threadMessage.url, threadMessage.image_url)}
+                                </div>
+                                
+                            </div>
+                        </>
+                    ))}
+                </div>
+
             </div>
         </div>
     );

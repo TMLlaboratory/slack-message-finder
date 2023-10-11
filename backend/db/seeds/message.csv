@@ -1,7 +1,0 @@
-channel_id,user_id,ts,thread_ts,text,url,image_name,image_url
-1,1,1632925390,,Hello World!,http://example.com,msg1.png,http://example.com/msg1.png
-1,2,1632925400,1632925390,Reply to Hello World!,http://example.com,msg2.png,http://example.com/msg2.png
-2,3,1632925410,,Good Morning,http://example.com,msg3.png,http://example.com/msg3.png
-3,4,1632925420,,Hello Everyone!,http://example.com,msg4.png,http://example.com/msg4.png
-4,5,1632925430,,Hello!,http://example.com,msg5.png,http://example.com/msg5.png
-5,6,1632925440,,Hi!,http://example.com,msg6.png,http://example.com/msg6.png

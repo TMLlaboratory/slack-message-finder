@@ -8,14 +8,63 @@
     width: 20%;
 }
 
-.box {
+.allbox {
     display:flex;
     width: 100%;
+    background-color: #3E3D3D;
 }
 .messagesBox {
     width: 50%;
+    height: 100vh;
+    overflow-y: auto;
+    overscroll-behavior-y: none;
+    background-color: #2E2D2D;
+    border: 3px solid #3E3D3D;
 }
 
 .replyBar {
-    margin-right: 0;
+    height: 100vh; 
+    overflow-y: auto;
+    overscroll-behavior-y: none; 
+    background-color: #2E2D2D;
+    border-left: 3px solid #3E3D3D;
+    margin-top: 3px;
+}
+
+.channeltitle {
+    border-bottom: 6px solid #3E3D3D;
+    position: fixed;
+    align-items: center;
+    background-color: #2E2D2D;
+    height: 65px;
+}
+
+.channeltitle p {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    margin-left: 30px;
+}
+.box{
+    margin-top: 80px;
+}
+
+.threadltitle {
+    position: fixed;
+    align-items: center;
+    background-color: #2E2D2D;
+    border-bottom: 6px solid #3E3D3D;
+    height: 65px;
+    width: 100%;
+}
+.threadltitle p {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    margin-left: 30px;
+}
+.replyBox {
+    
 }

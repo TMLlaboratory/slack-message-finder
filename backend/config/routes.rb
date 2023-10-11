@@ -1,14 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :channels, only: [:index]
       resources :members, only: [:index]
-      resources :messages, only: [:index] do
-        collection do
-          get ':channel', to: 'messages#index'
-        end
+      resources :users, only: [:index, :show]  
+      resources :channels, only: [:index] do
+        resources :messages, only: [:index]
       end
-      resources :users, only: [:index]
     end
   end
 end

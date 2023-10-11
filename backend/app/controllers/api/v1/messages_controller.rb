@@ -1,53 +1,43 @@
 class Api::V1::MessagesController < ApplicationController
     def index
-        if params[:channel_id] 
-            raw_messages = Message.where(channel_id: params[:channel_id])  
-        else
-            raw_messages = Message.all
-        end
-
-        organized_messages = organize_messages(raw_messages)
-
-        render json: organized_messages
+        channel_id = params[:channel_id]
+        messages = Message.where(channel_id: channel_id).order(:ts)
+        grouped_messages = group_messages(messages)
+        render json: grouped_messages
     end
 
     private
 
-    def organize_messages(raw_messages)
-        parents = raw_messages.select { |message| message.thread_ts.nil? }
-        children = raw_messages.select { |message| message.thread_ts.present? }
-
-        organized_messages = parents.map do |parent|
-            {
-                id: parent.id,
-                user_id: parent.user_id,  
-                ts: parent.ts,
-                thread_ts: parent.thread_ts,
-                text: parent.text,
-                image_name: parent.image_name,
-                image_url: parent.image_url,
-                url: parent.url,
-                channel_id: parent.channel_id, 
-                created_at: parent.created_at,
-                updated_at: parent.updated_at,
-                children: children.select { |child| child.thread_ts == parent.ts }.map do |child|
-                    {
-                        id: child.id,
-                        user_id: child.user_id, 
-                        ts: child.ts,
-                        thread_ts: child.thread_ts,
-                        text: child.text,
-                        image_name: child.image_name,
-                        image_url: child.image_url,
-                        url: child.url,
-                        channel_id: child.channel_id,  
-                        created_at: child.created_at,
-                        updated_at: child.updated_at
-                    }
+    def group_messages(messages)
+        grouped = {}
+    
+        messages.each do |message|
+            ts = message.ts
+            thread_ts = message.thread_ts
+    
+            # thread_ts が nil または空で、ts がグループ化されていない場合、新しい親メッセージ
+            if (thread_ts.nil? || thread_ts.empty?) && !grouped.key?(ts)
+                grouped[ts] = { parent: message, children: [], thread: [] }
+            end
+    
+            # thread_ts が nil または空で、ts がすでにグループ化されている場合、それは同じ ts を持つ親メッセージの子
+            if (thread_ts.nil? || thread_ts.empty?) && grouped.key?(ts)
+                # 親メッセージの子でないことを確認してから追加
+                unless grouped[ts][:parent].id == message.id
+                    grouped[ts][:children] << message
                 end
-            }
+            end
+    
+            # thread_ts が nil または空ではなく、親メッセージ ts と一致する場合、親のスレッドメッセージ
+            unless (thread_ts.nil? || thread_ts.empty?)
+                if grouped.key?(thread_ts)
+                    grouped[thread_ts][:thread] << message
+                end
+            end
         end
-
-        organized_messages
+    
+        grouped.values
     end
+    
 end
+  

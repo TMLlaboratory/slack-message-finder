@@ -1,5 +1,5 @@
 .sideBarContainer {
-    height: 100vh; /* Viewport Heightの100%に設定 */
+    height: 100vh; 
 }
 
 .sideBarContent {
@@ -13,6 +13,7 @@
     border: 3px solid #3E3D3D;
     flex: 0.5; 
     display: flex;
+    height: 65px;
 }
 
 .teamNameImg {
@@ -42,6 +43,7 @@
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     margin-left: 20px;
+    height: 65px;
 }
 
 .teamNameButton:focus {
@@ -118,5 +120,5 @@
 }
 
 .selectedChannelButton {
-    background-color: #3E3D3D; /* または他のハイライト色 */
+    background-color: #3E3D3D; 
 }

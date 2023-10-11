@@ -14,7 +14,7 @@ interface Channel {
     updated_at: string;
 };
 
-interface Message {
+interface ParentMessage {
     id: number;
     user_id: string;  
     ts: string;
@@ -26,33 +26,71 @@ interface Message {
     channel_id: string;  
     created_at: string;
     updated_at: string;
-    children: Message[];
-};
+}
+
+interface ChildMessage {
+    id: number;
+    user_id: string;  
+    ts: string;
+    thread_ts: string | null;
+    text: string;
+    image_name: string | null;
+    image_url: string | null;
+    url: string | null;
+    channel_id: string;  
+    created_at: string;
+    updated_at: string;
+}
+
+interface ThreadMessage {
+    id: number;
+    user_id: string;  
+    ts: string;
+    thread_ts: string | null;
+    text: string;
+    image_name: string | null;
+    image_url: string | null;
+    url: string | null;
+    channel_id: string;  
+    created_at: string;
+    updated_at: string;
+}
+
+interface MessageGroup {
+    parent: ParentMessage;
+    children: ChildMessage[];
+    thread: ThreadMessage[];
+}
 
 const ChannelPage: FC = () => {
     const [channels, setChannels] = useState<Channel[]>([]);
     const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null); 
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+    const [messageGroups, setMessageGroups] = useState<MessageGroup[]>([]);
+    const [selectedMessageGroup, setSelectedMessageGroup] = useState<MessageGroup | null>(null);
 
     useEffect(() => {
         fetch('http://localhost:3000/api/v1/channels')
             .then(response => response.json())
-            .then(data => setChannels(data));
+            .then((data: Channel[]) => {  
+                setChannels(data);
+                const initialChannel = data.sort((a: Channel, b: Channel) => a.id - b.id)[0];  
+                setSelectedChannel(initialChannel);
+            });
     }, []);
+    
 
     useEffect(() => {
         if (selectedChannel) {
-            fetch(`http://localhost:3000/api/v1/messages?channel_id=${selectedChannel.channel_id}`) 
+            fetch(`http://localhost:3000/api/v1/channels/${selectedChannel.channel_id}/messages`) 
                 .then(response => response.json())
-                .then(data => setMessages(data));
+                .then(data => setMessageGroups(data));
         }
-        setSelectedMessage(null);
+        setSelectedMessageGroup(null);
     }, [selectedChannel]);
 
-    const handleToggleChildren = (message: Message) => {
-        setSelectedMessage(prevMessage => (
-            prevMessage && prevMessage.id === message.id ? null : message
+    const handleToggleChildren = (messageGroup: MessageGroup) => {
+        setSelectedMessageGroup(prevMessageGroup => (
+            prevMessageGroup && prevMessageGroup.parent.id === messageGroup.parent.id ? null : messageGroup
         ));
     };
 
@@ -66,16 +104,33 @@ const ChannelPage: FC = () => {
                     }} />
                 </div>
 
-                <div className={s.box}>
-                    <div className={s.messagesBox} style={{ flex: selectedMessage ? 7 : 1 }}>
-                        <p>{selectedChannel ? selectedChannel.name : ''}</p>  
-                        {messages.map(message => (
-                            <MessageBox key={message.id} message={message} onToggleChildren={handleToggleChildren} />
+                <div className={s.allbox}>
+                    <div className={s.messagesBox} style={{ flex: selectedMessageGroup ? 7 : 1 }}>
+                        <div className={s.channeltitle} style={{ width: selectedMessageGroup ? '58%' : '100%' }} >
+                            <p>{selectedChannel ? selectedChannel.name : ''}</p>
+                        </div>
+                        <div className={s.box}>
+                            {messageGroups.map(messageGroup => (
+                            <MessageBox 
+                                key={messageGroup.parent.id} 
+                                messageGroup={messageGroup} 
+                                onReplyClick={() => handleToggleChildren(messageGroup)} 
+                            />
                         ))}
+                        </div>
+                        
                     </div>
 
-                    <div className={s.replyBar} style={{ flex: selectedMessage ? 3 : 0 }}>
-                        {selectedMessage && <ReplyBar message={selectedMessage} children={selectedMessage.children} />}
+                    <div className={s.replyBar} style={{ flex: selectedMessageGroup ? 3 : 0 }}>
+                        <div className={s.threadltitle}>
+                            <p>スレッド</p>
+                        </div>
+                        <div className={s.box}>
+                            <div className={s.replybox}>
+                                {selectedMessageGroup && <ReplyBar messageGroup={selectedMessageGroup} />}
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
 

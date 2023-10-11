@@ -1,10 +1,17 @@
-/* styles/globals.css またはあなたのグローバルスタイルシート */
+/* styles/globals.css */
 html, body, main{
     margin: 0;
     height: 100%;
     width: 100%;
+    position: fixed;
 }
 img {
     height: 150px;
     width: 150px;
+}
+p{
+    color: white;
+}
+a{
+    color:deepskyblue;
 }
