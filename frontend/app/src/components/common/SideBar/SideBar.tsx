@@ -43,12 +43,6 @@ const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
                     <button onClick={toggleDropdown} className={s.teamNameButton}>
                         TMLlab 
                         <img src="lowerTriangle.svg" className={s.teamNameImg}/>
-                        {isDropdownOpen && (
-                            <div className={s.dropdownMenu}>
-                                <option>NUTMEG</option>
-                                <option>技育展</option>
-                            </div>
-                        )}
                     </button>
                 </div>
 

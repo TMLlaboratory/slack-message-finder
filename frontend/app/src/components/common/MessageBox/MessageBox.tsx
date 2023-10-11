@@ -1,74 +1,156 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import s from '@/components/common/MessageBox/MessageBox.module.css'
 
-interface Message {
+
+interface ParentMessage {
     id: number;
-    user_id: string; 
+    user_id: string;
     ts: string;
     thread_ts: string | null;
     text: string;
     image_name: string | null;
     image_url: string | null;
     url: string | null;
-    channel_id: string;  
+    channel_id: string;
     created_at: string;
     updated_at: string;
-    children: Message[]; 
-};
-
-interface MessageBoxProps {
-    message: Message;
-    onToggleChildren: (message: Message) => void;
 }
 
-const MessageBox: FC<MessageBoxProps> = ({ message, onToggleChildren }) => {
+interface ChildMessage {
+    id: number;
+    user_id: string;
+    ts: string;
+    thread_ts: string | null;
+    text: string;
+    image_name: string | null;
+    image_url: string | null;
+    url: string | null;
+    channel_id: string;
+    created_at: string;
+    updated_at: string;
+}
+
+interface ThreadMessage {
+    id: number;
+    user_id: string;
+    ts: string;
+    thread_ts: string | null;
+    text: string;
+    image_name: string | null;
+    image_url: string | null;
+    url: string | null;
+    channel_id: string;
+    created_at: string;
+    updated_at: string;
+}
+
+interface MessageGroup {
+    parent: ParentMessage;
+    children: ChildMessage[];
+    thread: ThreadMessage[];
+}
+
+interface MessageBoxProps {
+    messageGroup: MessageGroup;
+    onReplyClick: (messageGroup: MessageGroup) => void;
+}
+
+interface User {
+    display_name: string;
+    image: string;
+}
+
+interface UserMap {
+    [key: string]: User; 
+}
+
+const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
+    const { parent, children, thread } = messageGroup;
+    
+    const [userMap, setUserMap] = useState<UserMap>({}); 
+
+    useEffect(() => {
+        const userIds = [parent.user_id, ...children.map(child => child.user_id)];
+        const uniqueUserIds = Array.from(new Set(userIds));
+        Promise.all(uniqueUserIds.map(userId => 
+            fetch(`http://localhost:3000/api/v1/users/${userId}`)
+                .then(response => response.json())
+                .then(data => ({ userId, data }))
+        ))
+        .then(results => {
+            const newUserMap: UserMap = {};  
+            results.forEach(result => {
+                newUserMap[result.userId] = result.data;
+            });
+            setUserMap(newUserMap);
+        });
+    }, [parent.user_id, children]);
+
+    const formatDateTime = (isoString: string) => {
+        const dateObj = new Date(isoString);
+        const formattedDate = dateObj.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const formattedTime = dateObj.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
+        return `${formattedDate} - ${formattedTime}`;
+    };
+
+    const renderContent = (text: string | null, url: string | null, imageUrl: string | null) => {
+        if (text && url) {
+            return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p>;
+        }
+        if (text) {
+            return <p className={s.p}>{text}</p>;
+        }
+        if (url) {
+            return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>;
+        }
+        if (imageUrl) {
+            return <p className={s.p}><img src={imageUrl} alt="Image"/></p>;
+        }
+        return null;
+    };
+
     return (
-        <div key={message.id}>
-            <div>
-                {message.user_id && (
-                    <>
-                        <p>User:</p> {message.user_id} 
-                        <br />
-                    </>
-                )}
-                {message.text && message.url ? (
-                    <>
-                        <p>Text:</p> <a href={message.url}>{message.text}</a> 
-                        <br />
-                    </>
-                ) : (
-                    <>
-                        {message.text && (
-                            <>
-                                <p>Text:</p> {message.text} 
-                                <br />
-                            </>
+        <div key={parent.id}>
+            <div className={s.onebox}>
+                <div className={s.imgbox}>
+                    <img className={s.img} src="Group 10.svg" />
+                </div>
+                <div>
+
+                    <div className={s.messageBox}>
+                        <div>
+                            <div className={s.nameTimeBox}>
+                                {userMap[parent.user_id] && <p className={s.p}>{userMap[parent.user_id]?.display_name || 'Loading...'}</p>}
+                                {parent.created_at && <p className={s.ptime}>{formatDateTime(parent.created_at)}</p>}
+                            </div>
+                            <div>
+                                {renderContent(parent.text, parent.url, parent.image_url)}
+                            </div>
+                        </div>
+
+                        <div>
+                            {children.map((child: ChildMessage) => (
+                                <div key={child.id}>
+                                    {renderContent(child.text, child.url, child.image_url)}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    
+
+                    <div>
+                        {thread.length > 0 && (
+                            <div className={s.buttonBox}>
+                                <img className={s.replyimg} src="Group 10.svg" />
+                                <button className={s.replybutton} onClick={() => onReplyClick(messageGroup)}>
+                                    {thread.length} 件の返信
+                                </button>
+                            </div>
+                            
                         )}
-                        {message.url && (
-                            <>
-                                <p>URL:</p> <a href={message.url}>{message.url}</a>  
-                                <br />
-                            </>
-                        )}
-                    </>
-                )}
-                {message.image_url ? (
-                    <>
-                        <img src={message.image_url} alt={message.image_name || 'image'} />
-                        <br />
-                    </>
-                ) : (
-                    <>
-                        {message.image_name && (
-                            <>
-                                <p>Image Name:</p> {message.image_name} 
-                                <br />
-                            </>
-                        )}
-                    </>
-                )}
-                {message.children.length > 0 && (
-                    <button onClick={() => onToggleChildren(message)}>{message.children.length} 件の返信</button>
-                )}
+                    </div>
+                    
+                </div>
             </div>
         </div>
     );
