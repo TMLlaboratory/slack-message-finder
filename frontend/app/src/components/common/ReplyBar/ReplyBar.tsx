@@ -62,6 +62,7 @@ interface UserMap {
 
 const ReplyBar: FC<ReplyBarProps> = ({ messageGroup }) => {
     const { parent, thread } = messageGroup;
+    const SLACK_ENTERPRISE_TOKEN =process.env.NEXT_PUBLIC_SLACK_ENTERPRISE_TOKEN;
     
     const [userMap, setUserMap] = useState<UserMap>({}); 
 
@@ -90,8 +91,17 @@ const ReplyBar: FC<ReplyBarProps> = ({ messageGroup }) => {
     };
     
     const renderContent = (text: string | null, url: string | null, imageUrl: string | null) => {
+        if (text && url && imageUrl){
+            return <><p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p><p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        }
         if (text && url) {
             return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p>;
+        }
+        if (text && imageUrl){
+            return <><p className={s.p}>{text}</p><p className={s.p}><img src={imageUrl +'?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        }
+        if (url && imageUrl){
+            return <><p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p><p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
         }
         if (text) {
             return <p className={s.p}>{text}</p>;
@@ -100,7 +110,7 @@ const ReplyBar: FC<ReplyBarProps> = ({ messageGroup }) => {
             return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>;
         }
         if (imageUrl) {
-            return <p className={s.p}><img src={imageUrl} alt="Image"/></p>;
+            return <p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p>;
         }
         return null;
     };
