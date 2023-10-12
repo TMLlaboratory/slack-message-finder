@@ -123,7 +123,11 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
         <div key={parent.id}>
             <div className={s.onebox}>
                 <div className={s.imgbox}>
-                    <img className={s.img} src="Group 10.svg" />
+                    {userMap[parent.user_id] ? (
+                            <img className={s.img} src={userMap[parent.user_id].image} alt={userMap[parent.user_id].display_name} />
+                        ) : (
+                            <img className={s.img} src="Group 10.svg" alt="default icon" />
+                    )}
                 </div>
                 <div>
 

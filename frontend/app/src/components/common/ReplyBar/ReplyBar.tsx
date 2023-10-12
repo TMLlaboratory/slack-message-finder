@@ -121,7 +121,11 @@ const ReplyBar: FC<ReplyBarProps> = ({ messageGroup }) => {
             <div>
                 <div className={s.onebox}>
                     <div className={s.imgbox}>
-                        <img className={s.img} src="Group 10.svg" />
+                        {userMap[parent.user_id] ? (
+                            <img className={s.img} src={userMap[parent.user_id].image} alt={userMap[parent.user_id].display_name} />
+                        ) : (
+                            <img className={s.img} src="Group 10.svg" alt="default icon" />
+                        )}
                     </div>
                     <div>
                         <div className={s.nameTimeBox}>
@@ -145,7 +149,11 @@ const ReplyBar: FC<ReplyBarProps> = ({ messageGroup }) => {
                             <div key={threadMessage.id} className={s.onebox}>
 
                                 <div className={s.imgbox}>
-                                    <img className={s.img} src="Group 10.svg" />
+                                    {userMap[threadMessage.user_id] ? (
+                                        <img className={s.img} src={userMap[threadMessage.user_id].image} alt={userMap[threadMessage.user_id].display_name} />
+                                    ) : (
+                                        <img className={s.img} src="Group 10.svg" alt="default icon" />
+                                    )}
                                 </div>
 
                                 <div>
