@@ -11,6 +11,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
 user_clinet = WebClient(token=os.environ["SLACK_USER_TOKEN"])
+bot_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
 
 try:
     connection = psycopg2.connect(
@@ -130,6 +131,69 @@ def handle_channel_create_event(event, logger):
     logger.debug("channel_id: " + channel_id)
     logger.debug("name: " + name)
     logger.debug("creator: " + creator)
+
+
+@app.command("/get_channels")
+def get_channels(ack, logger):
+    ack()
+    bot_response = bot_client.conversations_list(
+        types="public_channel, private_channel"
+    )
+    channels = bot_response.get("channels", [])
+    logger.debug(json.dumps(channels, indent=4))
+    if channels:
+        channel_names = [channel["name"] for channel in channels]
+        logger.debug(f"ワークスペースのチャンネルリスト: {', '.join(channel_names)}")
+    else:
+        logger.debug("チャンネルが見つかりません。")
+
+
+@app.command("/get_all_channel_members")
+def get_all_channel_members(ack, logger):
+    ack()
+    bot_response = bot_client.conversations_list(
+        types="public_channel, private_channel"
+    )
+
+    # 全てのチャンネルを取得
+    channels = bot_response.get("channels", [])
+    for channel in channels:
+        channel_id = channel.get("id", "")
+        channel_name = channel.get("name", "")
+
+        logger.debug(channel_id)
+        logger.debug(channel_name)
+
+        member_response = bot_client.conversations_members(channel=channel_id)
+
+        if member_response.get("ok", ""):
+            # チャンネルの全てのユーザを取得
+            members = member_response.get("members", "")
+            logger.debug(json.dumps(members, indent=4))
+            for member_id in members:
+                logger.debug("channel_id: " + channel_id + "member_id: " + member_id)
+
+                if connection is not None:
+                    try:
+                        cursor = connection.cursor()
+                        current_datetime = datetime.now()
+                        sql = "INSERT INTO members (channel_id, user_id, created_at, updated_at) VALUES (%s, %s, %s, %s)"
+                        cursor.execute(
+                            sql,
+                            (
+                                channel_id,
+                                member_id,
+                                current_datetime,
+                                current_datetime,
+                            ),
+                        )
+                        connection.commit()
+                        logger.info("データの挿入に成功しました")
+                    except Exception as e:
+                        logger.error("データの挿入に失敗しました")
+                    cursor.close()
+                else:
+                    logger.error("データベースへの接続に失敗したため、クエリを実行できません。")
 
 
 if __name__ == "__main__":
