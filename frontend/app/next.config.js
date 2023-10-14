@@ -1,6 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
+module.exports = {
+  env: {
+    NEXT_PUBLIC_SLACK_ENTERPRISE_TOKEN: process.env.SLACK_ENTERPRISE_TOKEN,
+  },
 }
-
-module.exports = nextConfig

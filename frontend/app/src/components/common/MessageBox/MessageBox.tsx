@@ -66,6 +66,7 @@ interface UserMap {
 
 const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
     const { parent, children, thread } = messageGroup;
+    const SLACK_ENTERPRISE_TOKEN =process.env.NEXT_PUBLIC_SLACK_ENTERPRISE_TOKEN;
     
     const [userMap, setUserMap] = useState<UserMap>({}); 
 
@@ -94,8 +95,17 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
     };
 
     const renderContent = (text: string | null, url: string | null, imageUrl: string | null) => {
+        if (text && url && imageUrl){
+            return <><p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p><p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        }
         if (text && url) {
             return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p>;
+        }
+        if (text && imageUrl){
+            return <><p className={s.p}>{text}</p><p className={s.p}><img src={imageUrl +'?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        }
+        if (url && imageUrl){
+            return <><p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p><p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
         }
         if (text) {
             return <p className={s.p}>{text}</p>;
@@ -104,7 +114,7 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
             return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>;
         }
         if (imageUrl) {
-            return <p className={s.p}><img src={imageUrl} alt="Image"/></p>;
+            return <p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p>;
         }
         return null;
     };
@@ -113,7 +123,11 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
         <div key={parent.id}>
             <div className={s.onebox}>
                 <div className={s.imgbox}>
-                    <img className={s.img} src="Group 10.svg" />
+                    {userMap[parent.user_id] ? (
+                            <img className={s.img} src={userMap[parent.user_id].image} alt={userMap[parent.user_id].display_name} />
+                        ) : (
+                            <img className={s.img} src="Group 10.svg" alt="default icon" />
+                    )}
                 </div>
                 <div>
 
@@ -136,7 +150,6 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
                             ))}
                         </div>
                     </div>
-                    
 
                     <div>
                         {thread.length > 0 && (

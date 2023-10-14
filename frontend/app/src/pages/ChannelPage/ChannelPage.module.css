@@ -15,7 +15,7 @@
 }
 .messagesBox {
     width: 50%;
-    height: 100vh;
+    height: 94vh;
     overflow-y: auto;
     overscroll-behavior-y: none;
     background-color: #2E2D2D;
@@ -23,7 +23,7 @@
 }
 
 .replyBar {
-    height: 100vh; 
+    height: 94vh; 
     overflow-y: auto;
     overscroll-behavior-y: none; 
     background-color: #2E2D2D;
