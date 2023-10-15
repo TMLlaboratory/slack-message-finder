@@ -18,6 +18,7 @@ require "rails/test_unit/railtie"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+# Dotenv.load
 
 module Backend
   class Application < Rails::Application
@@ -40,7 +41,7 @@ module Backend
     # Moved the CORS configuration inside the Application class block
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:8000'
+        origins ENV['FRONTEND_URL']
 
         resource '*',
           headers: :any,

@@ -66,6 +66,7 @@ interface UserMap {
 const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
     const { parent, children, thread } = messageGroup;
     const SLACK_ENTERPRISE_TOKEN = process.env.NEXT_PUBLIC_SLACK_ENTERPRISE_TOKEN;
+    const API_URL = process.env.API_URL;
 
     const [userMap, setUserMap] = useState<UserMap>({});
 
@@ -74,7 +75,7 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
         const uniqueUserIds = Array.from(new Set(userIds));
         Promise.all(
             uniqueUserIds.map((userId) =>
-                fetch(`http://localhost:3000/api/v1/users/${userId}`)
+                fetch(`${API_URL}/api/v1/users/${userId}`)
                     .then((response) => response.json())
                     .then((data) => ({ userId, data }))
             )
