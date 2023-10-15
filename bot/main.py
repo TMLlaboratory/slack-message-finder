@@ -140,12 +140,40 @@ def get_channels(ack, logger):
         types="public_channel, private_channel"
     )
     channels = bot_response.get("channels", [])
-    logger.debug(json.dumps(channels, indent=4))
-    if channels:
-        channel_names = [channel["name"] for channel in channels]
-        logger.debug(f"ワークスペースのチャンネルリスト: {', '.join(channel_names)}")
-    else:
-        logger.debug("チャンネルが見つかりません。")
+    logger.debug(bot_response)
+    for channel in channels:
+        channel_id = channel.get("id", "")
+        name = channel.get("name", "")
+        creator = channel.get("creator", "")
+        is_private = channel.get("is_private", False)  # is_privateは存在しないため，Falseが入る
+
+        logger.debug("channel_id: " + channel_id)
+        logger.debug("name: " + name)
+        logger.debug("creator: " + creator)
+
+        if connection is not None:
+            try:
+                cursor = connection.cursor()
+                current_datetime = datetime.now()
+                sql = "INSERT INTO channels (channel_id, name, creator, is_private, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
+                cursor.execute(
+                    sql,
+                    (
+                        channel_id,
+                        name,
+                        creator,
+                        is_private,
+                        current_datetime,
+                        current_datetime,
+                    ),
+                )
+                connection.commit()
+                logger.info("データの挿入に成功しました")
+            except Exception as e:
+                logger.error("データの挿入に失敗しました")
+            cursor.close()
+        else:
+            logger.error("データベースへの接続に失敗したため、クエリを実行できません。")
 
 
 @app.command("/get_all_channel_members")
