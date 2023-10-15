@@ -36,6 +36,8 @@ services:
       - db
     stdin_open: true
     tty: true
+    env_file:
+      - ./settings/backend-prod.env
 
   frontend:
     build:
@@ -48,6 +50,8 @@ services:
       - "8000:3000"
     stdin_open: true
     tty: true
+    env_file:
+      - ./settings/frontend-prod.env
 
   bot:
     build:

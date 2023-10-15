@@ -29,6 +29,8 @@ services:
       - db
     stdin_open: true
     tty: true
+    env_file:
+      - ./settings/backend.env
 
   frontend:
     build:
@@ -41,6 +43,8 @@ services:
       - "8000:3000"
     stdin_open: true
     tty: true
+    env_file:
+      - ./settings/frontend.env
 
   bot:
     build:
@@ -49,7 +53,7 @@ services:
     volumes:
       - ./bot:/usr/src/app
     env_file:
-      - settings/bot.env
+      - ./settings/bot.env
     ports:
       - "9000:9000"
     command: ["python", "main.py"]

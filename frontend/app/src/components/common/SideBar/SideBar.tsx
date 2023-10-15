@@ -20,9 +20,10 @@ const SideBar: FC<SideBarProps> = ({ setSelectedChannel }) => {
     const [channels, setChannels] = useState<Channel[]>([]);
     const [selectedChannelId, setSelectedChannelId] = useState<number | null>(null);
     const [selectedChannelIds, setSelectedChannelIds] = useState<string[]>([]);
+    const API_URL = process.env.API_URL;
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/v1/channels")
+        fetch(`${API_URL}/api/v1/channels`)
             .then((response) => response.json())
             .then((data) => {
                 setChannels(data);

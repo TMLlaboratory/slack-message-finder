@@ -81,9 +81,11 @@ const ChannelPage: FC = () => {
     const [selectedMessageGroup2, setSelectedMessageGroup2] = useState<MessageGroup | null>(null);
     const [users1, setUsers1] = useState<User[]>([]);
     const [users2, setUsers2] = useState<User[]>([]);
+    const API_URL = process.env.API_URL;
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/v1/channels")
+        // console.log(`${API_URL}` + "/api/v1/channels")
+        fetch(`${API_URL}/api/v1/channels`)
             .then((response) => response.json())
             .then((data: Channel[]) => {
                 setChannels(data);
@@ -96,7 +98,7 @@ const ChannelPage: FC = () => {
 
     useEffect(() => {
         if (selectedChannel1) {
-            fetch(`http://localhost:3000/api/v1/channels/${selectedChannel1.channel_id}/messages`)
+            fetch(`${API_URL}/api/v1/channels/${selectedChannel1.channel_id}/messages`)
                 .then((response) => response.json())
                 .then((data) => {
                     setMessageGroups1(data.grouped_messages);
@@ -111,7 +113,7 @@ const ChannelPage: FC = () => {
 
     useEffect(() => {
         if (selectedChannel2) {
-            fetch(`http://localhost:3000/api/v1/channels/${selectedChannel2.channel_id}/messages`)
+            fetch(`${API_URL}/api/v1/channels/${selectedChannel2.channel_id}/messages`)
                 .then((response) => response.json())
                 .then((data) => {
                     setMessageGroups2(data.grouped_messages);
