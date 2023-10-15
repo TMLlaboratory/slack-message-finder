@@ -1,9 +1,10 @@
 .onebox {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    margin-top: 20px;
     display: flex;
 }
 
-.imgbox{
+.imgbox {
     margin-left: 30px;
     margin-right: 10px;
 }
@@ -14,51 +15,62 @@
     margin: 0;
 }
 
-.messageBox{
+.messageBox {
     margin-bottom: 20px;
 }
 
-.nameTimeBox{
+.nameTimeBox {
     display: flex;
     margin-bottom: 10px;
 }
 
-.p{
+.p {
     margin: 0;
     margin-bottom: 5px;
 }
 
-.ptime{
+.pname {
+    color: #a9a9a9;
     margin: 0;
-    margin-left: 20px;
+    margin-bottom: 5px;
 }
 
-.buttonBox{
+.ptime {
+    margin: 0;
+    margin-left: 20px;
+    color: #a9a9a9;
+}
+
+.buttonBox {
     display: flex;
 }
 
-.replyimg{
+.replyimg {
     height: 30px;
     width: 30px;
 }
 
-.replybutton{
-    color:deepskyblue;
+.replybutton {
+    color: deepskyblue;
     background: transparent;
-    border: none; 
-    outline: none; 
-    cursor: pointer; 
+    border: none;
+    outline: none;
+    cursor: pointer;
 }
 
-.replyWord{
+.replyWord {
     margin-left: 30px;
     margin-bottom: 20px;
+}
+
+.pword {
+    color: #a9a9a9;
 }
 
 .replyWord p {
     position: relative;
     display: inline-block;
-    padding-right: 290px; 
+    padding-right: 290px;
 }
 
 .replyWord p::after {
@@ -67,8 +79,8 @@
     position: absolute;
     top: 50%;
     right: 0;
-    width: 270px; 
-    height: 1px; 
-    background-color:gray; 
+    width: 270px;
+    height: 1px;
+    background-color: gray;
     transform: translateY(-50%);
 }

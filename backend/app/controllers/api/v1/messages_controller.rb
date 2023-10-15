@@ -1,9 +1,15 @@
 class Api::V1::MessagesController < ApplicationController
-    def index
+        def index
         channel_id = params[:channel_id]
         messages = Message.where(channel_id: channel_id).order(:ts)
         grouped_messages = group_messages(messages)
-        render json: grouped_messages
+        user_ids = Member.where(channel_id: channel_id).pluck(:user_id)
+        users = User.where(user_id: user_ids).select(:user_id, :email, :image, :real_name)
+        response = {
+            grouped_messages: grouped_messages,
+            users: users
+        }
+        render json: response
     end
 
     private
