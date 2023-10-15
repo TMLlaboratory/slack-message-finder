@@ -7,7 +7,7 @@ tasks:
       - task -l --sort none
 
   build:
-    desc: This task is docker dompose build
+    desc: This task is docker compose build
     cmds:
       - docker compose build
       - docker compose run --rm api bin/rails db:create
