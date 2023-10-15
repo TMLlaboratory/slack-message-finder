@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   cloudflare:
-    image: cloudflare/cloudflared
+    image: cloudflare/cloudflared:latest
     container_name: "SMF-CLOUDFLARE"
     volumes:
       - ./cloudflare/prod:/home/nonroot/.cloudflared
