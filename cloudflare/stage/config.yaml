@@ -1,0 +1,14 @@
+tunnel: a88bb5f1-9b6d-4c77-a8e3-4e68b23cced5
+credentials-file: /home/nonroot/.cloudflared/a88bb5f1-9b6d-4c77-a8e3-4e68b23cced5.json
+protocol: http2
+
+ingress:
+  - hostname: slack-message-finder.coconutml.com
+    service: http://frontend:8000
+  - hostname: slack-message-finder-api.coconutml.com
+    service: http://api:3000
+  - hostname: slack-message-finder-bot.coconutml.com
+    service: http://bot:9000
+  - hostname: slack-message-finder-db.coconutml.com
+    service: http://db:5432
+  - service: http_status:404
