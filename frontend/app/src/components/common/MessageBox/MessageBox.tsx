@@ -1,6 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
-import s from '@/components/common/MessageBox/MessageBox.module.css'
-
+import React, { FC, useState, useEffect } from "react";
+import s from "@/components/common/MessageBox/MessageBox.module.css";
 
 interface ParentMessage {
     id: number;
@@ -61,26 +60,27 @@ interface User {
 }
 
 interface UserMap {
-    [key: string]: User; 
+    [key: string]: User;
 }
 
 const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
     const { parent, children, thread } = messageGroup;
-    const SLACK_ENTERPRISE_TOKEN =process.env.NEXT_PUBLIC_SLACK_ENTERPRISE_TOKEN;
-    
-    const [userMap, setUserMap] = useState<UserMap>({}); 
+    const SLACK_ENTERPRISE_TOKEN = process.env.NEXT_PUBLIC_SLACK_ENTERPRISE_TOKEN;
+
+    const [userMap, setUserMap] = useState<UserMap>({});
 
     useEffect(() => {
-        const userIds = [parent.user_id, ...children.map(child => child.user_id)];
+        const userIds = [parent.user_id, ...children.map((child) => child.user_id)];
         const uniqueUserIds = Array.from(new Set(userIds));
-        Promise.all(uniqueUserIds.map(userId => 
-            fetch(`http://localhost:3000/api/v1/users/${userId}`)
-                .then(response => response.json())
-                .then(data => ({ userId, data }))
-        ))
-        .then(results => {
-            const newUserMap: UserMap = {};  
-            results.forEach(result => {
+        Promise.all(
+            uniqueUserIds.map((userId) =>
+                fetch(`http://localhost:3000/api/v1/users/${userId}`)
+                    .then((response) => response.json())
+                    .then((data) => ({ userId, data }))
+            )
+        ).then((results) => {
+            const newUserMap: UserMap = {};
+            results.forEach((result) => {
                 newUserMap[result.userId] = result.data;
             });
             setUserMap(newUserMap);
@@ -89,32 +89,85 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
 
     const formatDateTime = (isoString: string) => {
         const dateObj = new Date(isoString);
-        const formattedDate = dateObj.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
-        const formattedTime = dateObj.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
+        const formattedDate = dateObj.toLocaleDateString("ja-JP", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        });
+        const formattedTime = dateObj.toLocaleTimeString("ja-JP", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
         return `${formattedDate} - ${formattedTime}`;
     };
 
     const renderContent = (text: string | null, url: string | null, imageUrl: string | null) => {
-        if (text && url && imageUrl){
-            return <><p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p><p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        if (text && url && imageUrl) {
+            return (
+                <>
+                    <p className={s.p}>
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                            {text}
+                        </a>
+                    </p>
+                    <p className={s.p}>
+                        <img src={imageUrl + "?t=" + SLACK_ENTERPRISE_TOKEN} alt="Image" />
+                    </p>
+                </>
+            );
         }
         if (text && url) {
-            return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{text}</a></p>;
+            return (
+                <p className={s.p}>
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                        {text}
+                    </a>
+                </p>
+            );
         }
-        if (text && imageUrl){
-            return <><p className={s.p}>{text}</p><p className={s.p}><img src={imageUrl +'?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        if (text && imageUrl) {
+            return (
+                <>
+                    <p className={s.p}>{text}</p>
+                    <p className={s.p}>
+                        <img src={imageUrl + "?t=" + SLACK_ENTERPRISE_TOKEN} alt="Image" />
+                    </p>
+                </>
+            );
         }
-        if (url && imageUrl){
-            return <><p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p><p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p></>;
+        if (url && imageUrl) {
+            return (
+                <>
+                    <p className={s.p}>
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                            {url}
+                        </a>
+                    </p>
+                    <p className={s.p}>
+                        <img src={imageUrl + "?t=" + SLACK_ENTERPRISE_TOKEN} alt="Image" />
+                    </p>
+                </>
+            );
         }
         if (text) {
             return <p className={s.p}>{text}</p>;
         }
         if (url) {
-            return <p className={s.p}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>;
+            return (
+                <p className={s.p}>
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                        {url}
+                    </a>
+                </p>
+            );
         }
         if (imageUrl) {
-            return <p className={s.p}><img src={imageUrl + '?t=' +SLACK_ENTERPRISE_TOKEN} alt="Image"/></p>;
+            return (
+                <p className={s.p}>
+                    <img src={imageUrl + "?t=" + SLACK_ENTERPRISE_TOKEN} alt="Image" />
+                </p>
+            );
         }
         return null;
     };
@@ -122,31 +175,20 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
     return (
         <div key={parent.id}>
             <div className={s.onebox}>
-                <div className={s.imgbox}>
-                    {userMap[parent.user_id] ? (
-                            <img className={s.img} src={userMap[parent.user_id].image} alt={userMap[parent.user_id].display_name} />
-                        ) : (
-                            <img className={s.img} src="Group 10.svg" alt="default icon" />
-                    )}
-                </div>
+                <div className={s.imgbox}>{userMap[parent.user_id] ? <img className={s.img} src={userMap[parent.user_id].image} alt={userMap[parent.user_id].display_name} /> : <img className={s.img} src="Group 10.svg" alt="default icon" />}</div>
                 <div>
-
                     <div className={s.messageBox}>
                         <div>
                             <div className={s.nameTimeBox}>
-                                {userMap[parent.user_id] && <p className={s.p}>{userMap[parent.user_id]?.display_name || 'Loading...'}</p>}
+                                {userMap[parent.user_id] && <p className={s.pname}>{userMap[parent.user_id]?.display_name || "Loading..."}</p>}
                                 {parent.created_at && <p className={s.ptime}>{formatDateTime(parent.created_at)}</p>}
                             </div>
-                            <div>
-                                {renderContent(parent.text, parent.url, parent.image_url)}
-                            </div>
+                            <div>{renderContent(parent.text, parent.url, parent.image_url)}</div>
                         </div>
 
                         <div>
                             {children.map((child: ChildMessage) => (
-                                <div key={child.id}>
-                                    {renderContent(child.text, child.url, child.image_url)}
-                                </div>
+                                <div key={child.id}>{renderContent(child.text, child.url, child.image_url)}</div>
                             ))}
                         </div>
                     </div>
@@ -159,10 +201,8 @@ const MessageBox: FC<MessageBoxProps> = ({ messageGroup, onReplyClick }) => {
                                     {thread.length} 件の返信
                                 </button>
                             </div>
-                            
                         )}
                     </div>
-                    
                 </div>
             </div>
         </div>
