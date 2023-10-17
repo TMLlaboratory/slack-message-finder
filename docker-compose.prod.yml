@@ -33,7 +33,7 @@ services:
       TZ: Asia/Tokyo
       RAILS_ENV: development
     ports:
-      - "3000:1234"
+      - "3000:3000"
     depends_on:
       - db
     stdin_open: true
@@ -50,7 +50,7 @@ services:
       - ./frontend/app:/usr/src/app
     command: sh -c "npm install && npm run dev"
     ports:
-      - "8000:3000"
+      - "8000:8000"
     stdin_open: true
     tty: true
     env_file:
