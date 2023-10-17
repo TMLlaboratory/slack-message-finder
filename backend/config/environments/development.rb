@@ -2,6 +2,7 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  config.hosts << "slack-message-finder.coconutml.com"
   config.hosts << "slack-message-finder-api.coconutml.com"
 
   # In the development environment your application's code is reloaded any time
