@@ -50,7 +50,7 @@ services:
       - ./frontend/app:/usr/src/app
     command: sh -c "npm install && npm run dev"
     ports:
-      - "8000:8000"
+      - "8000:12000"
     stdin_open: true
     tty: true
     env_file:
@@ -71,4 +71,3 @@ services:
 
 volumes:
   pgdata:
-
