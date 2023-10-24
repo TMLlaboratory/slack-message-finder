@@ -40,7 +40,7 @@ services:
       - ./frontend/app:/usr/src/app
     command: sh -c "npm install && npm run dev"
     ports:
-      - "8080:8080"
+      - "8000:3000"
     stdin_open: true
     tty: true
     env_file:
