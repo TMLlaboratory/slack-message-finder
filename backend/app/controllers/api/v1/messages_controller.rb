@@ -1,5 +1,5 @@
 class Api::V1::MessagesController < ApplicationController
-        def index
+    def index
         channel_id = params[:channel_id]
         messages = Message.where(channel_id: channel_id).order(:ts)
         grouped_messages = group_messages(messages)
@@ -11,6 +11,20 @@ class Api::V1::MessagesController < ApplicationController
         }
         render json: response
     end
+
+    def allmessage
+        grouped_messages = Message.all.group_by(&:user_id)
+        user_id = params[:user_id]
+        user_messages = grouped_messages[user_id] || []
+        user_messages_count = user_messages.count
+        
+        response = {
+            user_messages_count: user_messages_count,
+            user_messages: user_messages,
+        }
+        render json: response
+
+      end
 
     private
 
@@ -45,5 +59,7 @@ class Api::V1::MessagesController < ApplicationController
         grouped.values
     end
     
+    # def get_days_message_count(messages)
+
+
 end
-  
