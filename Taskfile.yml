@@ -13,6 +13,7 @@ tasks:
       - docker compose run --rm api bin/rails db:create
       - docker compose run --rm api bin/rails db:migrate
       - docker compose run --rm api bin/rails db:seed
+      - docker compose run --rm createbuckets
       - docker compose up
 
   up:
