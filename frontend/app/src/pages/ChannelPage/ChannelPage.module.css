@@ -26,6 +26,7 @@
 .messagesBox {
     background-color: #2e2d2d;
     border: 3px solid #3e3d3d;
+    word-break: break-word;
 }
 
 .replyBar {
