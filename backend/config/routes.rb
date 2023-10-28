@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       end
       resources :messages, only: [:index] do
         get "allmessage/:user_id", to: "messages#allmessage", on: :collection
+        collection do
+          get 'all'
+        end
       end
     end
   end
